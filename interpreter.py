@@ -190,11 +190,31 @@ def run(string):
 
 def main():
   import sys
-  path = sys.argv[1]
-  with open(path, 'r') as file:
-    content = file.read()
-  print(run(content))
-  
+
+  def shell():
+    while True:
+      exp = input(">>>")
+      if exp == "env":
+        print(global_environment)
+      elif exp == "exit":
+        break
+      else:
+        print(run(exp))
+    
+  def file_program():
+    path = sys.argv[1]
+    with open(path, 'r') as file:
+      content = file.read()
+    print(run(content))
+    
+  if len(sys.argv) > 1:
+    file_program()
+  elif len(sys.argv) < 2:
+    shell()
+  else:
+    raise TypeError("Wrong number of arguments")
+
+
   
 if __name__ == '__main__':
   main()
