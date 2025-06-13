@@ -199,8 +199,11 @@ def main():
       elif exp == "exit":
         break
       else:
-        print(run(exp))
-    
+        try:
+          print(run(exp))
+        except Exception as e:
+          print(e)
+
   def file_program():
     path = sys.argv[1]
     with open(path, 'r') as file:
@@ -214,7 +217,5 @@ def main():
   else:
     raise TypeError("Wrong number of arguments")
 
-
-  
 if __name__ == '__main__':
   main()
