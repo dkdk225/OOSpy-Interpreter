@@ -117,7 +117,6 @@ def spyEval(form, env):
       return spyEval(elseBody, env)
   elif form[0] == "attr":
     (tag, obj, attr) = form
-    print("attr:", form)
     return spyEval(obj, env).lookup(attr)
   # (class [name] [super] ([class_body]))
   # Example:::
@@ -137,10 +136,8 @@ def spyEval(form, env):
       evaluated_args.append(spyEval(arg, env))
     return f(*evaluated_args)
   elif isinstance(form, list): #function call
-    print (form)
     name = form.pop(0)
     param_list = form
-
     #----------Checks if the environment that the procedure was declared on is an instance-------------
     #------------if so adds the instance as first argument to parameter list
     if isinstance(name, list):
@@ -190,3 +187,14 @@ def run(string):
 # print(global_environment)
 # print("+++++++++++++++++++++++++")
 # print(global_environment.binding['Test'])
+
+def main():
+  import sys
+  path = sys.argv[1]
+  with open(path, 'r') as file:
+    content = file.read()
+  print(run(content))
+  
+  
+if __name__ == '__main__':
+  main()
