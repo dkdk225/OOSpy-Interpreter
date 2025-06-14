@@ -97,13 +97,14 @@ def spyEval(form, env):
   elif isinstance(form ,str):
     return env.lookup(form)
   elif form[0] == "begin": #compound expression
-    tag = form.pop(0)
+    tag = form[0]
     val = None
-    for exp in form:
+    for exp in form[1:]:
       val = spyEval(exp, env)
     return val
   elif form[0] == "set": #attribute assignment
     (tag, lhs, rhs) = form
+    print("set, lhs", lhs)
     (target_env, name) = lhsEval (lhs, env)
     target_env.add(name, spyEval(rhs, env))
   elif form[0] == "def": #function declaration
@@ -129,24 +130,26 @@ def spyEval(form, env):
     env.add(name, Primitive(name, lambda: Environment({}, classEnv)))
     spyEval(body, classEnv)
   elif form[0] in Primitive.tags:
-    tag = form.pop(0)
+    tag = form[0]
     f = spyEval(tag, env).body
     evaluated_args = []
-    for arg in form:
+    for arg in form[1:]:
       evaluated_args.append(spyEval(arg, env))
     return f(*evaluated_args)
   elif isinstance(form, list): #function call
-    name = form.pop(0)
-    param_list = form
+    print("function call 1", form)
+    name = form[0]
+    param_list = form[1:]
+    print("function call 2", form)
     #----------Checks if the environment that the procedure was declared on is an instance-------------
     #------------if so adds the instance as first argument to parameter list
     if isinstance(name, list):
       param_list.insert(0, name[1])
     #----------------------
-
-
+    print("param list", form)
     f = spyEval(name, env) # f is the function that was saved in environment
     #evaluate function parameters at call environment then assign these parameters at function environment
+    # print(f, env.binding['averager'])
     function_environment = Environment({}, f.environment)
     for i in range(0 ,len(param_list)):
       function_environment.add(f.param_list[i], spyEval(param_list[i], env))
@@ -172,6 +175,7 @@ global_environment = Environment({
 
 def run(string):
   tokenized = tokenize(string)
+  print(tokenized)
   return spyEval(tokenized, global_environment)
 
 
