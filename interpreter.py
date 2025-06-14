@@ -30,7 +30,7 @@ def tokenize(string):
   current = token_list
 
   for char in string:
-    if char == " ":
+    if char == " " or char =="\n":
       token = add_token(token, current)
     elif char == "(":
       token = add_token(token, current)
