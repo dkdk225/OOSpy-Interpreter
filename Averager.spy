@@ -1,0 +1,30 @@
+(begin
+  (class Averager None 
+    (begin
+      (def init (self)
+        (begin
+          (set (attr self sum) 0)
+          (set (attr self numbers) 0)
+        )
+      )
+      (def add_value (self val) 
+        (begin
+          (set (attr self sum) (+ (attr self sum) val ))
+          (set (attr self numbers) (+ (attr self numbers) 1 ))
+        )
+      )
+      (def get_average (self) 
+        (/ (attr self sum) (attr self numbers))
+      )
+    )
+  )
+
+  (set averager (Averager))
+  ((attr averager init))
+  ((attr averager add_value) 59)
+  ((attr averager add_value) 5)
+  ((attr averager add_value) 25)
+  ((attr averager get_average))
+)
+
+
