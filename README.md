@@ -100,9 +100,56 @@ You can call class methods this way:
 
 `((attr point init) 5 7)` this method call will set values of attributes x to 5 and y to 7 in point object.
 
-
-
 # General Ideas Behind this Interpreter
+
+## Binding Environments
+
+Binding environments are tables that have names on one side and values associated with those names on the other side. Many aspects of the programming language are built upon environments these will be explained in next sections. 
+Alongside key-value pairs environments have a parent property. When a key is not in the environment, parent environment is checked.
+To implement an envrionment an hash map can be used.
+
+| Key  | Value  |
+|------|--------|
+| a    | 9      |
+| b    | 2.8    |
+| foo  | -15    |
+
+## Global Environment
+
+Global environment contains the definitions of basic built-in functions `+` `-` `*` `/` and `=`. It is the parent of all other environments.
+
+## Variables
+
+`(set <name> <value>)` when interpreter reads these lines it sets the `<name>` to `<value>` in environment which statement is in.
+For example `(set bar 39)` will set the value corresponding to `bar` key in the table to `39`. As a result we'd have a table that looked like this:
+
+| Key  | Value  |
+|------|--------|
+| a    | 9      |
+| b    | 2.8    |
+| foo  | -15    |
+| bar  | 39     |
+
+## Procedures(Functions)
+
+Procedures are objects, containing the parameter list procedure body and a pointer to the environment in which the procedure was declared. When a procedure is declared, interpreter binds the function name to function object created, in the binding environment. 
+The procedure object looks like this:
+```
+{
+  params_list: <list of parameters>
+  body: <tokenized expression>
+  env: <pointer to the environment in which the function is declared>
+}
+```
+
+## Procedure Calls
+
+When a procedure is called every argument is evaluated. Then a new environment is created for procedure and evaluated arguments are assigned to arguments stated in proceduere declaration. This environment has a parent environment which is the same as procedure object.
+
+## Classes
+
+Classes are primitive procedures that return binding environments. These binding environments have a parent and when a attribute is not in the environment the parent is checked for the attribute. If a class has no parent then it's parent is the global environment.
+
 
 # How To Install And Run a Program
 You need to get these files to your local machine in a folder. Then to run a program you need to open a terminal on that folder and type:
