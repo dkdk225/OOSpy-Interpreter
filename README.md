@@ -10,6 +10,8 @@ The syntax of spy is fully parenthesized prefix syntax. Prefix means that the na
 ## Assignment
 `(set x 34)` will assign 34 to variable x.
 
+`(set (attr object x) 43)` will assign 43 to attribute `x` of `object`
+
 ## Basic Built-In Functions
 `+`, `-`, `*`, `/`, `=` are basic builtin functions here's an example for each function:
 - `(+ 5 3)` will **add** the values and return the result: 8
@@ -46,11 +48,59 @@ The value of a compound expression is the value of it's last component/expresson
 
 ## If Statements
 
-`(if <condition> <true body> <false body>` if the condition is true the `<true body>` will get executed if it's false then the `<false body>` will get executed
+`(if <condition> <true body> <false body>` if the condition is true the `<true body>` will get executed if it's false then the `<false body>` will get executed. Here's an example:
+
+`(if (= 6 6) (+ 1 1) (- 2 9))` 
+
+This example will return 2 since the condition is true.
 
 ## Class Declaration
+`(class <name> <parent> <body>)` `<parent>` can be `None` if the class has no parent.
+Here's an example class declaration
+
+```
+(class Point None
+  (begin
+    (def init (self x y)
+      (set (attr self x) x)
+      (set (attr self y) y)
+    )
+  )
+)
+```
+Classes have no specially named methods that gets called automatically. So after instantiating the `Point` class `init` method has to be called manually.
+Classes are implemented as functions not environments therefore they cannot be changed after declaration.
+
+## Instantiating a Class
+
+`(<class name>)` will return a class instance. `set` can be used to assign the instance to a variable like this:
+
+`(set <object name> (<class name>)`
+
+Here's an example for the class declared in previous section:
+
+`(set point (Point)`
+
+## Accessing Attributes
+
+`(attr <object name> <attribute name>` is used for accessing attributes of objects.
+
+You can change the values of attributes of an object this way:
+
+`(set (attr <object name> <attribute name>) <new value>`
+
+You can call class methods this way:
+
+`((attr <object name> <method name>) <parameters>)`
+
 
 ## Class Method Calls
+
+`((attr <object name> <method name>) <parameters>)` is used for calling class methods here's an example for `point` object declared couple sections before:
+
+`((attr point init) 5 7)` this method call will set values of attributes x to 5 and y to 7 in point object.
+
+
 
 # General Ideas Behind this Interpreter
 
@@ -63,4 +113,7 @@ You can run the example "Averager.spy" program instead by typing:
 
 `python interpreter.py Averager.spy`
 
-It also have a shell which works in read execute print loop. There is an extra keyword "env" which lets you view the global environment 
+It also have a shell which works in read execute print loop. There is an extra keyword "env" which lets you view the global environment.
+To open that you can use the command:
+
+`python interpreter.py`
